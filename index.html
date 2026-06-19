@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Les 3 registres de communication</title>
+
+<style>
+
+:root{
+    --bleu:#2E6CA4;
+    --vert:#2E8B57;
+    --rouge:#D9534F;
+    --gris:#ECEFF3;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:var(--gris);
+    font-family:Segoe UI, Arial, sans-serif;
+    color:#333;
+}
+
+.logo{
+    position:absolute;
+    top:15px;
+    left:15px;
+    width:80px;
+    mix-blend-mode:multiply;
+}
+
+.container{
+    max-width:1000px;
+    margin:40px auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border-radius:22px;
+    padding:35px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+h1{
+    text-align:center;
+    color:var(--bleu);
+}
+
+.intro-image{
+    width:100%;
+    border-radius:16px;
+    margin-top:20px;
+}
+
+.center{
+    text-align:center;
+}
+
+.start-btn,
+.next-btn{
+    background:var(--bleu);
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:12px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.start-btn:hover,
+.next-btn:hover{
+    opacity:.9;
+}
+
+.progress{
+    height:12px;
+    background:#d9dee5;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:var(--bleu);
+    transition:.4s;
+}
+
+.question-number{
+    color:var(--bleu);
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.question{
+    font-size:1.3em;
+    line-height:1.6;
+    margin-bottom:25px;
+}
+
+.answers{
+    display:grid;
+    gap:15px;
+}
+
+.answer-btn{
+    border:none;
+    background:#E7ECF2;
+    padding:18px;
+    border-radius:12px;
+    font-size:18px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.answer-btn:hover{
+    background:#D8E3EE;
+}
+
+.correct{
+    background:var(--vert)!important;
+    color:white;
+}
+
+.incorrect{
+    background:var(--rouge)!important;
+    color:white;
+}
+
+.feedback{
+    display:none;
+    margin-top:25px;
+    padding:15px;
+    border-radius:12px;
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+}
+
+.success{
+    background:#E9F8EE;
+    color:var(--vert);
+    border:2px solid var(--vert);
+}
+
+.error{
+    background:#FDECEC;
+    color:var(--rouge);
+    border:2px solid var(--rouge);
+}
+
+.justification{
+    display:none;
+    margin-top:20px;
+    background:#F8F9FB;
+    border-left:6px solid var(--bleu);
+    padding:18px;
+    border-radius:10px;
+    line-height:1.6;
+}
+
+.next-zone{
+    display:none;
+    text-align:center;
+    margin-top:25px;
+}
+
+.restart-btn{
+    margin-top:15px;
+    border:none;
+    background:var(--rouge);
+    color:white;
+    padding:12px 25px;
+    border-radius:12px;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.result{
+    text-align:center;
+}
+
+.result img{
+    width:100%;
+    max-width:900px;
+    border-radius:18px;
+    margin-top:20px;
+}
+
+.victory{
+    color:var(--vert);
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.subtitle{
+    color:var(--bleu);
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<img src="Logo SYLP.jpg" class="logo" alt="Logo">
+
+<div class="container">
+
+<div id="startScreen" class="card">
+
+    <h1>Les 3 registres de communication</h1>
+
+    <img src="logos pathos ethos.png"
+         class="intro-image"
+         alt="Logos Pathos Ethos">
+
+    <div class="center">
+
+        <p style="font-size:20px;line-height:1.7;">
+            Retrouvez pour chaque situation professionnelle
+            le registre dominant :
+            <strong>LOGOS</strong>,
+            <strong>PATHOS</strong>
+            ou
+            <strong>ETHOS</strong>.
+        </p>
+
+        <button class="start-btn" onclick="startQuiz()">
+            Démarrer le questionnaire
+        </button>
+
+    </div>
+
+</div>
+
+<div id="quizScreen" class="card" style="display:none;">
+
+    <div class="progress">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <div id="questionNumber" class="question-number"></div>
+
+    <div id="questionText" class="question"></div>
+
+    <div id="answers" class="answers"></div>
+
+    <div id="feedback" class="feedback"></div>
+
+    <div id="justification" class="justification"></div>
+
+    <div id="nextZone" class="next-zone">
+        <button class="next-btn" onclick="nextQuestion()">
+            Question suivante
+        </button>
+    </div>
+
+</div>
+
+<div id="resultScreen" class="card" style="display:none;">
+
+    <div class="result">
+
+        <div class="victory">
+            🎉 BRAVO, C'EST GAGNÉ !
+        </div>
+
+        <div class="subtitle">
+            Vous avez identifié correctement les 10 situations.
+        </div>
+
+        <img src="logos pathos ethos.png"
+             alt="Les 3 registres">
+
+    </div>
+
+</div>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+question:"En respectant le phasage prévu, nous gagnerons deux jours sur le planning et réduirons de 15 % les temps d'attente entre les corps d'état.",
+answer:"LOGOS",
+justification:"LOGOS : argumentation fondée sur des données mesurables, des chiffres et une logique d'efficacité."
+},
+
+{
+question:"Je ne veux pas qu'un de vous rentre chez lui blessé ce soir. Vos familles comptent sur vous.",
+answer:"PATHOS",
+justification:"PATHOS : appel aux émotions, à la protection des proches."
+},
+
+{
+question:"Cela fait plus de quinze ans que je pilote ce type de travaux. Nous avons déjà réalisé plusieurs opérations similaires avec succès.",
+answer:"ETHOS",
+justification:"ETHOS : l'orateur s'appuie sur son expérience et sa crédibilité."
+},
+
+{
+question:"Les chantiers qui respectent systématiquement les consignes enregistrent trois fois moins d'accidents.",
+answer:"LOGOS",
+justification:"LOGOS : statistiques et faits objectifs."
+},
+
+{
+question:"Imaginez les conséquences pour l'équipe si un accident grave survenait aujourd'hui.",
+answer:"PATHOS",
+justification:"PATHOS : mobilisation des émotions."
+},
+
+{
+question:"J'applique cette méthode depuis plusieurs années et elle est reconnue dans nos procédures qualité.",
+answer:"ETHOS",
+justification:"ETHOS : expertise et expérience."
+},
+
+{
+question:"Cette répartition des tâches permet de diminuer les déplacements inutiles et d'améliorer notre productivité de 10 %.",
+answer:"LOGOS",
+justification:"LOGOS : argumentation rationnelle."
+},
+
+{
+question:"Grâce à votre engagement, nous avons livré un chantier dont nous pouvons tous être fiers.",
+answer:"PATHOS",
+justification:"PATHOS : fierté et sentiment d'appartenance."
+},
+
+{
+question:"Je porte toujours mes EPI, même pour une intervention de quelques minutes. Je vous demande de faire comme moi.",
+answer:"ETHOS",
+justification:"ETHOS : exemplarité du manager."
+},
+
+{
+question:"Cette nacelle réduira les temps d'installation de 30 %, ce qui compensera son coût dès la première année.",
+answer:"LOGOS",
+justification:"LOGOS : raisonnement coût-bénéfice."
+}
+
+];
+
+let currentQuestion = 0;
+
+function startQuiz(){
+    document.getElementById("startScreen").style.display="none";
+    document.getElementById("quizScreen").style.display="block";
+    loadQuestion();
+}
+
+function loadQuestion(){
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("questionNumber").innerHTML =
+    "Question " + (currentQuestion+1) + " / " + questions.length;
+
+    document.getElementById("questionText").innerHTML =
+    q.question;
+
+    document.getElementById("feedback").style.display="none";
+    document.getElementById("justification").style.display="none";
+    document.getElementById("nextZone").style.display="none";
+
+    let html="";
+
+    ["LOGOS","PATHOS","ETHOS"].forEach(choice=>{
+
+        html += `
+        <button class="answer-btn"
+                onclick="checkAnswer('${choice}')">
+            ${choice}
+        </button>`;
+
+    });
+
+    document.getElementById("answers").innerHTML = html;
+
+    document.getElementById("progressBar").style.width =
+    ((currentQuestion)/questions.length)*100 + "%";
+}
+
+function checkAnswer(choice){
+
+    const q = questions[currentQuestion];
+
+    document.querySelectorAll(".answer-btn").forEach(btn=>{
+
+        btn.disabled = true;
+
+        if(btn.innerText === q.answer)
+            btn.classList.add("correct");
+        else
+            btn.classList.add("incorrect");
+
+    });
+
+    const feedback = document.getElementById("feedback");
+
+    feedback.style.display="block";
+
+    document.getElementById("justification").style.display="block";
+    document.getElementById("justification").innerHTML =
+    "<strong>Justification :</strong><br><br>" +
+    q.justification;
+
+    if(choice === q.answer){
+
+        feedback.className = "feedback success";
+        feedback.innerHTML = "✅ Bonne réponse";
+
+        document.getElementById("nextZone").style.display="block";
+
+    }
+    else{
+
+        feedback.className = "feedback error";
+
+        feedback.innerHTML = `
+            ❌ Mauvaise réponse
+            <br>
+            <button class="restart-btn"
+                    onclick="restartQuiz()">
+                Recommencer depuis le début
+            </button>
+        `;
+    }
+}
+
+function restartQuiz(){
+
+    currentQuestion = 0;
+    loadQuestion();
+
+}
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+    if(currentQuestion >= questions.length){
+
+        document.getElementById("quizScreen").style.display="none";
+        document.getElementById("resultScreen").style.display="block";
+
+        return;
+    }
+
+    loadQuestion();
+}
+
+</script>
+
+</body>
+</html>
