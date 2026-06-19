@@ -19,107 +19,94 @@
     box-sizing: border-box;
 }
 
-html, body {
+body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
     background: var(--gris);
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #333;
-    overflow: hidden; /* Évite le scroll pour un rendu pur écran 16/9 */
+    /* Permet le défilement vertical sur smartphone si le texte est long */
+    overflow-y: auto; 
 }
 
-/* Container forcé au format 16/9 et centré */
+/* Container fluide et centré adapté aux écrans mobiles */
 .app-container {
-    width: 100vw;
-    height: 100vh;
-    max-width: 177.78vh; /* 16/9 ratio max width */
-    max-height: 56.25vw; /* 16/9 ratio max height */
-    margin: auto;
-    position: absolute;
-    top: 0; bottom: 0; left: 0; right: 0;
-    padding: 2.5vh 3vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 100%;
+    max-width: 480px; /* Largeur max type smartphone */
+    margin: 0 auto;
+    padding: 15px;
 }
 
 .logo {
-    position: absolute;
-    top: 3vh;
-    left: 3vw;
-    width: 90px;
+    display: block;
+    margin: 10px auto 15px auto;
+    width: 70px;
     mix-blend-mode: multiply;
-    z-index: 10;
 }
 
 .card {
     background: white;
-    border-radius: 24px;
-    padding: 4vh 4vw;
-    box-shadow: 0 12px 40px rgba(0,0,0,.12);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
+    border-radius: 18px;
+    padding: 20px 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    margin-bottom: 20px;
 }
 
 h1 {
     text-align: center;
     color: var(--bleu);
-    font-size: 2.5rem;
+    font-size: 1.6rem;
     margin-top: 0;
-    margin-bottom: 2vh;
+    margin-bottom: 15px;
+    line-height: 1.3;
 }
 
-/* Nouvel encadré pour la description de la situation */
+/* Encadré de situation optimisé pour mobile */
 .situation-context {
     background: var(--contexte-bg);
-    border-left: 8px solid var(--bleu);
-    padding: 2.5vh 2vw;
-    border-radius: 12px;
-    font-size: 1.35rem;
+    border-left: 5px solid var(--bleu);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.05rem;
     font-style: italic;
-    line-height: 1.5;
-    margin-bottom: 3vh;
+    line-height: 1.4;
+    margin-bottom: 15px;
     color: #444;
 }
 
 .question-text {
-    font-size: 1.7rem;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    line-height: 1.5;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 4vh;
+    margin-bottom: 25px;
     color: #111;
-    padding: 0 2vw;
 }
 
-/* Grille de boutons en ligne pour le plein écran */
-.answers-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2vw;
-    margin-bottom: 3vh;
+/* Boutons disposés verticalement pour le pouce sur smartphone */
+.answers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .answer-btn {
     border: none;
     background: #E7ECF2;
-    padding: 3vh 1vw;
-    border-radius: 16px;
-    font-size: 1.5rem;
+    padding: 16px 10px;
+    border-radius: 12px;
+    font-size: 1.25rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all .3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: background 0.2s;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
-.answer-btn:hover {
+.answer-btn:active {
     background: #D8E3EE;
-    transform: translateY(-2px);
 }
 
 .correct {
@@ -132,22 +119,19 @@ h1 {
     color: white;
 }
 
-/* Feedback et Justification sur la même ligne ou optimisés */
+/* Zone de correction */
 .bottom-zone {
-    min-height: 18vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    margin-top: 15px;
 }
 
 .feedback {
     display: none;
-    padding: 1.5vh;
-    border-radius: 12px;
-    font-size: 1.4rem;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1.15rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 2vh;
+    margin-bottom: 15px;
 }
 
 .success {
@@ -165,60 +149,57 @@ h1 {
 .justification {
     display: none;
     background: #F8F9FB;
-    border-left: 6px solid var(--bleu);
-    padding: 2vh 2vw;
-    border-radius: 10px;
-    font-size: 1.25rem;
-    line-height: 1.5;
+    border-left: 4px solid var(--bleu);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    line-height: 1.4;
 }
 
 .next-zone {
     display: none;
     text-align: center;
-    margin-top: 2vh;
+    margin-top: 20px;
 }
 
 .start-btn, .next-btn {
     background: var(--bleu);
     color: white;
     border: none;
-    padding: 2vh 4vw;
-    border-radius: 14px;
-    font-size: 1.4rem;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: opacity .2s;
+    width: 100%; /* Largeur totale sur mobile */
 }
 
 .restart-btn {
-    margin-top: 1vh;
+    margin-top: 10px;
     border: none;
     background: var(--rouge);
     color: white;
-    padding: 1vh 2vw;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
 }
 
-.start-btn:hover, .next-btn:hover, .restart-btn:hover {
-    opacity: .9;
-}
-
+/* Barre de progression */
 .progress-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2vh;
+    margin-bottom: 15px;
 }
 
 .progress {
-    height: 14px;
+    height: 10px;
     background: #d9dee5;
-    border-radius: 20px;
-    overflow: hidden;
+    border-radius: 10px;
     flex-grow: 1;
-    margin-right: 2vw;
+    margin-right: 15px;
+    overflow: hidden;
 }
 
 .progress-bar {
@@ -231,48 +212,49 @@ h1 {
 .question-number {
     color: var(--bleu);
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1rem;
     white-space: nowrap;
 }
 
-/* Écrans d'accueil et fin */
+/* Mise en page verticale pour l'accueil et la fin */
 .screen-layout {
     display: flex;
-    align-items: center;
-    gap: 4vw;
-    height: 100%;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .screen-text {
-    flex: 1;
-    font-size: 1.4rem;
-    line-height: 1.7;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    text-align: center;
 }
 
 .screen-media {
-    flex: 1;
     text-align: center;
+    margin-top: 10px;
 }
 
 .screen-media img {
     width: 100%;
-    max-height: 45vh;
+    max-height: 250px;
     object-fit: contain;
-    border-radius: 16px;
+    border-radius: 12px;
 }
 
 .victory {
     color: var(--vert);
-    font-size: 2.6rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    margin-bottom: 2vh;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .subtitle {
     color: var(--bleu);
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 3vh;
+    margin-bottom: 15px;
+    text-align: center;
 }
 </style>
 </head>
@@ -283,64 +265,56 @@ h1 {
 
 <div class="app-container">
 
-    <!-- ÉCRAN D'ACCUEIL -->
     <div id="startScreen" class="card">
         <h1>Les 3 registres de communication</h1>
         <div class="screen-layout">
-            <div class="screen-text">
-                <p>Retrouvez pour chaque situation professionnelle le registre dominant : <strong>LOGOS</strong>, <strong>PATHOS</strong> ou <strong>ETHOS</strong>.</p>
-                <p style="color: var(--bleu); font-weight: 600; margin-top: 3vh;">💡 À l'issue du test, vous découvrirez le philosophe qui a théorisé ces 3 notions.</p>
-                <button class="start-btn" onclick="startQuiz()" style="margin-top: 4vh;">Démarrer le questionnaire</button>
-            </div>
             <div class="screen-media">
                 <img src="logos-pathos-ethos.png" alt="Logos Pathos Ethos">
             </div>
+            <div class="screen-text">
+                <p>Retrouvez pour chaque situation professionnelle le registre dominant : <strong>LOGOS</strong>, <strong>PATHOS</strong> ou <strong>ETHOS</strong>.</p>
+                <p style="color: var(--bleu); font-weight: 600;">💡 À l'issue du test, vous découvrirez le philosophe qui a théorisé ces 3 notions.</p>
+                <button class="start-btn" onclick="startQuiz()" style="margin-top: 15px;">Démarrer le questionnaire</button>
+            </div>
         </div>
     </div>
 
-    <!-- ÉCRAN DU QUIZ -->
     <div id="quizScreen" class="card" style="display:none;">
-        <div>
-            <div class="progress-container">
-                <div class="progress">
-                    <div id="progressBar" class="progress-bar"></div>
-                </div>
-                <div id="questionNumber" class="question-number"></div>
+        <div class="progress-container">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar"></div>
             </div>
-
-            <!-- Zone de la description de situation -->
-            <div id="situationContext" class="situation-context"></div>
-            
-            <!-- Zone de la citation parlée -->
-            <div id="questionText" class="question-text"></div>
+            <div id="questionNumber" class="question-number"></div>
         </div>
 
-        <div>
-            <div id="answers" class="answers-grid"></div>
+        <div id="situationContext" class="situation-context"></div>
+        
+        <div id="questionText" class="question-text"></div>
 
-            <div class="bottom-zone">
-                <div id="feedback" class="feedback"></div>
-                <div id="justification" class="justification"></div>
-                <div id="nextZone" class="next-zone">
-                    <button class="next-btn" onclick="nextQuestion()">Question suivante</button>
-                </div>
+        <div id="answers" class="answers-list"></div>
+
+        <div class="bottom-zone">
+            <div id="feedback" class="feedback"></div>
+            <div id="justification" class="justification"></div>
+            <div id="nextZone" class="next-zone">
+                <button class="next-btn" onclick="nextQuestion()">Question suivante</button>
             </div>
         </div>
     </div>
 
-    <!-- ÉCRAN DE FIN -->
     <div id="resultScreen" class="card" style="display:none;">
         <h1>Félicitations !</h1>
         <div class="screen-layout">
-            <div class="screen-text">
-                <div class="victory">🎉 BRAVO, C'EST GAGNÉ !</div>
-                <div class="subtitle">Vous avez identifié correctement les 10 situations.</div>
-                <hr style="border: 0; border-top: 1px solid #ccc; margin: 3vh 0;">
-                <p style="font-size: 1.35rem;">C'est le philosophe grec <strong>Aristote</strong> qui a défini ces 3 notions (le Logos, le Pathos et l'Ethos) dans son ouvrage majeur intitulé <em>La Rhétorique</em>.</p>
-                <p style="font-size: 1.35rem; color: #555;">Il a vécu durant l'Antiquité au <strong>IVe siècle av. J.-C.</strong> (plus précisément de <strong>384 à 322 av. J.-C.</strong>).</p>
-            </div>
+            <div class="victory">🎉 BRAVO, C'EST GAGNÉ !</div>
+            <div class="subtitle">Vous avez identifié correctement les 10 situations.</div>
+            
             <div class="screen-media">
                 <img src="logos-pathos-ethos.png" alt="Les 3 registres">
+            </div>
+
+            <div class="screen-text" style="text-align: left; margin-top: 10px;">
+                <p>C'est le philosophe grec <strong>Aristote</strong> qui a défini ces 3 notions (le Logos, le Pathos et l'Ethos) dans son ouvrage majeur intitulé <em>La Rhétorique</em>.</p>
+                <p style="color: #555;">Il a vécu durant l'Antiquité au <strong>IVe siècle av. J.-C.</strong> (plus précisément de <strong>384 à 322 av. J.-C.</strong>).</p>
             </div>
         </div>
     </div>
@@ -415,7 +389,7 @@ let currentQuestion = 0;
 
 function startQuiz() {
     document.getElementById("startScreen").style.display = "none";
-    document.getElementById("quizScreen").style.display = "flex";
+    document.getElementById("quizScreen").style.display = "block";
     loadQuestion();
 }
 
@@ -466,21 +440,27 @@ function checkAnswer(choice) {
         feedback.className = "feedback error";
         feedback.innerHTML = `❌ Mauvaise réponse<br><button class="restart-btn" onclick="restartQuiz()">Recommencer le test</button>`;
     }
+    
+    // Fait défiler automatiquement l'écran vers le bas pour voir la correction sur petit écran
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
 function restartQuiz() {
     currentQuestion = 0;
     loadQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function nextQuestion() {
     currentQuestion++;
     if (currentQuestion >= questions.length) {
         document.getElementById("quizScreen").style.display = "none";
-        document.getElementById("resultScreen").style.display = "flex";
+        document.getElementById("resultScreen").style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
     }
     loadQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 
