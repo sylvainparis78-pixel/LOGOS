@@ -25,14 +25,12 @@ body {
     background: var(--gris);
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #333;
-    /* Permet le défilement vertical sur smartphone si le texte est long */
     overflow-y: auto; 
 }
 
-/* Container fluide et centré adapté aux écrans mobiles */
 .app-container {
     width: 100%;
-    max-width: 480px; /* Largeur max type smartphone */
+    max-width: 480px;
     margin: 0 auto;
     padding: 15px;
 }
@@ -61,7 +59,6 @@ h1 {
     line-height: 1.3;
 }
 
-/* Encadré de situation optimisé pour mobile */
 .situation-context {
     background: var(--contexte-bg);
     border-left: 5px solid var(--bleu);
@@ -83,7 +80,6 @@ h1 {
     color: #111;
 }
 
-/* Boutons disposés verticalement pour le pouce sur smartphone */
 .answers-list {
     display: flex;
     flex-direction: column;
@@ -96,7 +92,7 @@ h1 {
     background: #E7ECF2;
     padding: 16px 10px;
     border-radius: 12px;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.2s;
@@ -119,7 +115,6 @@ h1 {
     color: white;
 }
 
-/* Zone de correction */
 .bottom-zone {
     margin-top: 15px;
 }
@@ -171,7 +166,7 @@ h1 {
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    width: 100%; /* Largeur totale sur mobile */
+    width: 100%;
 }
 
 .restart-btn {
@@ -185,7 +180,6 @@ h1 {
     cursor: pointer;
 }
 
-/* Barre de progression */
 .progress-container {
     display: flex;
     align-items: center;
@@ -216,7 +210,6 @@ h1 {
     white-space: nowrap;
 }
 
-/* Mise en page verticale pour l'accueil et la fin */
 .screen-layout {
     display: flex;
     flex-direction: column;
@@ -265,6 +258,7 @@ h1 {
 
 <div class="app-container">
 
+    <!-- ÉCRAN D'ACCUEIL -->
     <div id="startScreen" class="card">
         <h1>Les 3 registres de communication</h1>
         <div class="screen-layout">
@@ -272,13 +266,14 @@ h1 {
                 <img src="logos-pathos-ethos.png" alt="Logos Pathos Ethos">
             </div>
             <div class="screen-text">
-                <p>Retrouvez pour chaque situation professionnelle le registre dominant : <strong>LOGOS</strong>, <strong>PATHOS</strong> ou <strong>ETHOS</strong>.</p>
-                <p style="color: var(--bleu); font-weight: 600;">💡 À l'issue du test, vous découvrirez le philosophe qui a théorisé ces 3 notions.</p>
+                <p>Retrouvez pour chaque situation professionnelle le registre dominant.</p>
+                <p style="color: var(--bleu); font-weight: 600;">💡 À l'issue du test, vous découvrirez le philosophe qui a théorisé ces notions.</p>
                 <button class="start-btn" onclick="startQuiz()" style="margin-top: 15px;">Démarrer le questionnaire</button>
             </div>
         </div>
     </div>
 
+    <!-- ÉCRAN DU QUIZ -->
     <div id="quizScreen" class="card" style="display:none;">
         <div class="progress-container">
             <div class="progress">
@@ -288,9 +283,7 @@ h1 {
         </div>
 
         <div id="situationContext" class="situation-context"></div>
-        
         <div id="questionText" class="question-text"></div>
-
         <div id="answers" class="answers-list"></div>
 
         <div class="bottom-zone">
@@ -302,18 +295,19 @@ h1 {
         </div>
     </div>
 
+    <!-- ÉCRAN DE FIN -->
     <div id="resultScreen" class="card" style="display:none;">
         <h1>Félicitations !</h1>
         <div class="screen-layout">
             <div class="victory">🎉 BRAVO, C'EST GAGNÉ !</div>
-            <div class="subtitle">Vous avez identifié correctement les 10 situations.</div>
+            <div class="subtitle">Vous avez identifié correctement les 12 situations.</div>
             
             <div class="screen-media">
                 <img src="logos-pathos-ethos.png" alt="Les 3 registres">
             </div>
 
             <div class="screen-text" style="text-align: left; margin-top: 10px;">
-                <p>C'est le philosophe grec <strong>Aristote</strong> qui a défini ces 3 notions (le Logos, le Pathos et l'Ethos) dans son ouvrage majeur intitulé <em>La Rhétorique</em>.</p>
+                <p>C'est le philosophe grec <strong>Aristote</strong> qui a défini ces notions (le Logos, le Pathos et l'Ethos) dans son ouvrage majeur intitulé <em>La Rhétorique</em>.</p>
                 <p style="color: #555;">Il a vécu durant l'Antiquité au <strong>IVe siècle av. J.-C.</strong> (plus précisément de <strong>384 à 322 av. J.-C.</strong>).</p>
             </div>
         </div>
@@ -322,72 +316,111 @@ h1 {
 </div>
 
 <script>
-const questions = [
+// Base de données globale contenant toutes les questions
+const baseQuestions = [
     {
         context: "Lors de la réunion de préparation, le chef de chantier explique :",
-        question: "« En respectant le phasage prévu, nous gagnerons deux jours sur le planning et réduirons de 15 % les temps d'attente entre les corps d'état. »",
+        question: "« En respectant le phasage prévu, nous gagnerons deux jours sur le planning et réduirons de 15 % les temps d'attente entre les corps d'état. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "LOGOS",
-        justification: "LOGOS : argumentation fondée sur des données mesurables, des chiffres et une logique d'efficacité."
+        justification: "LOGOS : argumentation fondée sur des données mesurables, des chiffres et une logique d'efficacité.[cite: 2]"
     },
     {
         context: "Avant une intervention en hauteur, le chef d'équipe déclare :",
-        question: "« Je ne veux pas qu'un de vous rentre chez lui blessé ce soir. Vos familles comptent sur vous. »",
+        question: "« Je ne veux pas qu'un de vous rentre chez lui blessé ce soir. Vos familles comptent sur vous. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "PATHOS",
-        justification: "PATHOS : appel aux émotions, à la protection des proches."
+        justification: "PATHOS : appel aux émotions, à la protection des proches.[cite: 2]"
     },
     {
-        context: "Face à un client inquiet, le conducteur de travaux affirme :",
-        question: "« Cela fait plus de quinze ans que je pilote ce type de travaux. Nous avons déjà réalisé plusieurs opérations similaires avec succès. »",
+        context: "Face à un client inquiet, le chef de chantier affirme :",
+        question: "« Cela fait plus de quinze ans que je pilote ce type de travaux. Nous avons déjà réalisé plusieurs opérations similaires avec succès. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "ETHOS",
-        justification: "ETHOS : l'orateur s'appuie sur son expérience et sa crédibilité."
+        justification: "ETHOS : l'orateur s'appuie sur son expérience et sa crédibilité.[cite: 2]"
     },
     {
         context: "Pour faire respecter le port des EPI, le chef d'équipe présente les statistiques internes :",
-        question: "« Les chantiers qui respectent systématiquement les consignes enregistrent trois fois moins d'accidents. »",
+        question: "« Les chantiers qui respectent systématiquement les consignes enregistrent trois fois moins d'accidents. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "LOGOS",
-        justification: "LOGOS : statistiques et faits objectifs."
+        justification: "LOGOS : statistiques et faits objectifs.[cite: 2]"
     },
     {
-        context: "Lors d'un briefing, le conducteur de travaux explique :",
-        question: "« Imaginez les conséquences pour l'équipe si un accident grave survenait aujourd'hui. Personne ne souhaite vivre une telle situation. »",
+        context: "Lors d'un briefing, le responsable explique :",
+        question: "« Imaginez les conséquences pour l'équipe si un accident grave survenait aujourd'hui. Personne ne souhaite vivre une telle situation. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "PATHOS",
         justification: "PATHOS : mobilisation des émotions et projection de la peur du drame."
     },
     {
         context: "Un collaborateur remet en question une méthode de travail. Le chef de chantier répond :",
-        question: "« J'applique cette méthode depuis plusieurs années et elle est reconnue dans nos procédures qualité. »",
+        question: "« J'applique cette méthode depuis plusieurs années et elle est reconnue dans nos procédures qualité. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "ETHOS",
         justification: "ETHOS : autorité issue de l'expertise, des règles et de l'expérience."
     },
     {
-        context: "Pour obtenir l'adhésion à une nouvelle organisation, le conducteur de travaux explique :",
-        question: "« Cette répartition des tâches permet de diminuer les déplacements inutiles et d'améliorer notre productivité de 10 %. »",
+        context: "Pour obtenir l'adhésion à une nouvelle organisation, le chef d'équipe explique :",
+        question: "« Cette répartition des tâches permet de diminuer les déplacements inutiles et d'améliorer notre productivité de 10 %. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "LOGOS",
         justification: "LOGOS : argumentation rationnelle visant l'optimisation logique du travail."
     },
     {
         context: "En fin de chantier, le responsable félicite son équipe :",
-        question: "« Grâce à votre engagement, nous avons livré un chantier dont nous pouvons tous être fiers. »",
+        question: "« Grâce à votre engagement, nous avons livré un chantier dont nous pouvons tous être fiers. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "PATHOS",
         justification: "PATHOS : valorisation de la fierté et renforcement du sentiment d'appartenance."
     },
     {
-        context: "Lors d'une causerie sécurité, le chef d'équipe déclare :",
-        question: "« Je porte toujours mes EPI, même pour une intervention de quelques minutes. Je vous demande de faire comme moi. »",
+        context: "Lors d'une causerie sécurité, le chef de chantier déclare :",
+        question: "« Je porte toujours mes EPI, même pour une intervention de quelques minutes. Je vous demande de faire comme moi. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "ETHOS",
         justification: "ETHOS : crédibilité reposant sur l'exemplarité comportementale du manager."
     },
     {
-        context: "Pour justifier un investissement matériel, le conducteur de travaux explique :",
-        question: "« Cette nacelle réduira les temps d'installation de 30 %, ce qui compensera son coût dès la première année. »",
+        context: "Pour justifier un investissement matériel, le chef d'équipe explique :",
+        question: "« Cette nacelle réduira les temps d'installation de 30 %, ce qui compensera son coût dès la première année. »[cite: 2]",
+        options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "LOGOS",
         justification: "LOGOS : raisonnement pragmatique fondé sur un ratio coût-bénéfice mathématique."
+    },
+    {
+        context: "Lors du lancement d'un chantier de transition énergétique, le responsable d'affaires motive ses chefs de chantier :",
+        question: "« Notre client nous fait confiance parce que nous maîtrisons ces technologies depuis des années. Tenir cet objectif d'économies d'énergie sera une immense fierté collective et la preuve de notre savoir-faire. »",
+        options: ["LOGOS et PATHOS", "ETHOS et LOGOS", "ETHOS et PATHOS"],
+        answer: "ETHOS et PATHOS",
+        justification: "ETHOS & PATHOS : Le manager s'appuie sur la crédibilité et l'expertise d'Equans (Ethos) puis stimule la fierté de réussir ensemble (Pathos)."
+    },
+    {
+        context: "Suite à un audit sécurité sur un chantier de raccordement, le chef de chantier fait un point strict sur les gants isolants :",
+        question: "« L'audit montre que 30 % des gants n'étaient pas testés. Le protocole impose un contrôle à chaque prise de poste, c'est logique. Je refuse de revivre le drame qu'on a connu il y a 5 ans dans la région. »",
+        options: ["ETHOS et PATHOS", "LOGOS et PATHOS", "LOGOS et ETHOS"],
+        answer: "LOGOS et PATHOS",
+        justification: "LOGOS & PATHOS : Le message associe des chiffres et la procédure stricte (Logos) au souvenir d'un accident pour marquer les esprits (Pathos)."
     }
 ];
 
+let questions = []; // Contiendra le tableau mélangé
 let currentQuestion = 0;
 
+// Fonction de mélange de tableau (Algorithme de Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 function startQuiz() {
+    // Cloner et mélanger le tableau de questions au début du jeu
+    questions = shuffleArray([...baseQuestions]);
+    currentQuestion = 0;
+    
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("quizScreen").style.display = "block";
     loadQuestion();
@@ -405,7 +438,8 @@ function loadQuestion() {
     document.getElementById("nextZone").style.display = "none";
 
     let html = "";
-    ["LOGOS", "PATHOS", "ETHOS"].forEach(choice => {
+    // Génération dynamique des boutons basés sur les options définies pour la question
+    q.options.forEach(choice => {
         html += `<button class="answer-btn" onclick="checkAnswer('${choice}')">${choice}</button>`;
     });
     document.getElementById("answers").innerHTML = html;
@@ -441,11 +475,12 @@ function checkAnswer(choice) {
         feedback.innerHTML = `❌ Mauvaise réponse<br><button class="restart-btn" onclick="restartQuiz()">Recommencer le test</button>`;
     }
     
-    // Fait défiler automatiquement l'écran vers le bas pour voir la correction sur petit écran
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
 function restartQuiz() {
+    // Mélange à nouveau les questions en cas de redémarrage complet
+    questions = shuffleArray([...baseQuestions]);
     currentQuestion = 0;
     loadQuestion();
     window.scrollTo({ top: 0, behavior: 'smooth' });
