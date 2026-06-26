@@ -249,6 +249,40 @@ h1 {
     margin-bottom: 15px;
     text-align: center;
 }
+
+/* Styles pour le sélecteur de quantité */
+.config-zone {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f0f4f8;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.config-zone label {
+    font-weight: bold;
+    color: #444;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.config-zone input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.input-error {
+    color: var(--rouge);
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    text-align: center;
+    display: none;
+}
 </style>
 </head>
 
@@ -258,7 +292,6 @@ h1 {
 
 <div class="app-container">
 
-    <!-- ÉCRAN D'ACCUEIL -->
     <div id="startScreen" class="card">
         <h1>Les 3 registres de communication</h1>
         <div class="screen-layout">
@@ -267,13 +300,19 @@ h1 {
             </div>
             <div class="screen-text">
                 <p>Retrouvez pour chaque situation professionnelle le registre dominant.</p>
-                <p style="color: var(--bleu); font-weight: 600;">💡 À l'issue du test, vous découvrirez le philosophe qui a théorisé ces notions.</p>
+                
+                <div class="config-zone">
+                    <label for="situationsCount">Nombre de situations à traiter (entre 1 et 12) :</label>
+                    <input type="number" id="situationsCount" value="6" min="1" max="12">
+                    <div id="configError" class="input-error">⚠️ Veuillez saisir un nombre valide entre 1 et 12.</div>
+                </div>
+
+                <p style="color: var(--bleu); font-weight: 600; margin-top: 15px;">💡 À l'issue du test, vous découvrirez le philosophe qui a théorisé ces notions.</p>
                 <button class="start-btn" onclick="startQuiz()" style="margin-top: 15px;">Démarrer le questionnaire</button>
             </div>
         </div>
     </div>
 
-    <!-- ÉCRAN DU QUIZ -->
     <div id="quizScreen" class="card" style="display:none;">
         <div class="progress-container">
             <div class="progress">
@@ -295,12 +334,11 @@ h1 {
         </div>
     </div>
 
-    <!-- ÉCRAN DE FIN -->
     <div id="resultScreen" class="card" style="display:none;">
         <h1>Félicitations !</h1>
         <div class="screen-layout">
             <div class="victory">🎉 BRAVO, C'EST GAGNÉ !</div>
-            <div class="subtitle">Vous avez identifié correctement les 12 situations.</div>
+            <div id="resultSubtitle" class="subtitle">Vous avez identifié correctement les situations.</div>
             
             <div class="screen-media">
                 <img src="logos-pathos-ethos.png" alt="Les 3 registres">
@@ -340,7 +378,7 @@ const baseQuestions = [
         justification: "ETHOS : l'orateur s'appuie sur son expérience et sa crédibilité."
     },
     {
-        context: "Pour faire respecter le port des EPI, le chef d'équipe présente les statistiques internes :",
+        context: "Pour faire respecter le port des EPI, le chef d'équipe presents les statistiques internes :",
         question: "« Les chantiers qui respectent systématiquement les consignes enregistrent trois fois moins d'accidents. »",
         options: ["LOGOS", "PATHOS", "ETHOS"],
         answer: "LOGOS",
@@ -404,7 +442,7 @@ const baseQuestions = [
     }
 ];
 
-let questions = []; // Contiendra le tableau mélangé
+let questions = []; // Contiendra le tableau mélangé et tronqué
 let currentQuestion = 0;
 
 // Fonction de mélange de tableau (Algorithme de Fisher-Yates)
@@ -417,8 +455,21 @@ function shuffleArray(array) {
 }
 
 function startQuiz() {
-    // Cloner et mélanger le tableau de questions au début du jeu
-    questions = shuffleArray([...baseQuestions]);
+    const inputCount = document.getElementById("situationsCount");
+    const countValue = parseInt(inputCount.value, 10);
+    const errorDiv = document.getElementById("configError");
+
+    // Validation de la saisie utilisateur
+    if (isNaN(countValue) || countValue < 1 || countValue > 12) {
+        errorDiv.style.display = "block";
+        return; // Stoppe le démarrage si la valeur est incorrecte
+    } else {
+        errorDiv.style.display = "none";
+    }
+
+    // Mélanger puis découper la liste des questions selon le choix
+    const shuffled = shuffleArray([...baseQuestions]);
+    questions = shuffled.slice(0, countValue);
     currentQuestion = 0;
     
     document.getElementById("startScreen").style.display = "none";
@@ -438,7 +489,6 @@ function loadQuestion() {
     document.getElementById("nextZone").style.display = "none";
 
     let html = "";
-    // Génération dynamique des boutons basés sur les options définies pour la question
     q.options.forEach(choice => {
         html += `<button class="answer-btn" onclick="checkAnswer('${choice}')">${choice}</button>`;
     });
@@ -479,8 +529,10 @@ function checkAnswer(choice) {
 }
 
 function restartQuiz() {
-    // Mélange à nouveau les questions en cas de redémarrage complet
-    questions = shuffleArray([...baseQuestions]);
+    // Relance avec le même nombre de questions configuré au départ
+    const countValue = questions.length;
+    const shuffled = shuffleArray([...baseQuestions]);
+    questions = shuffled.slice(0, countValue);
     currentQuestion = 0;
     loadQuestion();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -490,6 +542,10 @@ function nextQuestion() {
     currentQuestion++;
     if (currentQuestion >= questions.length) {
         document.getElementById("quizScreen").style.display = "none";
+        
+        // Personnalisation dynamique du sous-titre de fin avec la valeur sélectionnée
+        document.getElementById("resultSubtitle").innerHTML = "Vous avez identifié correctement les " + questions.length + " situations.";
+        
         document.getElementById("resultScreen").style.display = "block";
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
